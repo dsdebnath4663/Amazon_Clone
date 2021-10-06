@@ -21,7 +21,7 @@ namespace Amazon.Web.Controllers
         {
             ProductSearchViewModels model = new ProductSearchViewModels();
 
-            model.pageNumber = pageNo.HasValue ? pageNo.Value>0 ? pageNo.Value : 1 : 1;
+            model.pageNumber = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
             model.productList = ProductService.Instance.GetProductsByPageNo(model.pageNumber);
 
             if (string.IsNullOrEmpty(Search) == false)
@@ -48,9 +48,7 @@ namespace Amazon.Web.Controllers
 
         [HttpPost]
         public ActionResult Create(ProductViewModels models)
-
         {
-
             var newProduct = new Product();
 
             newProduct.Name = models.Name;
@@ -82,8 +80,6 @@ namespace Amazon.Web.Controllers
 
             return RedirectToAction("ProductTable");
         }
-
-
 
         [HttpPost]
         public ActionResult Delete(Product product)
