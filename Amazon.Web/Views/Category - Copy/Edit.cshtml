@@ -1,0 +1,30 @@
+﻿@model Amazon.Entities.Category
+@{
+    ViewBag.Title = "Edit";
+
+    var trueChecked = Model.isfeatured ? "checked" : string.Empty;
+    var falseChecked = !Model.isfeatured ? "checked" : string.Empty;
+}
+
+<h2>Edit Category</h2>
+
+<form method="post">
+
+    <input type="hidden" name="ID" value="@Model.ID" />
+
+    <label>Name</label>
+    <input name="Name" value="@Model.Name" />
+    <br />
+    <label>Description</label>
+    <input name="Description" value="@Model.Description" />
+    <br />
+    <div class="form-group">
+        <label for="isFeatured">Is Featured ?</label>
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" @trueChecked>True
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" @falseChecked>False
+    </div>
+
+
+
+    <button type="submit">Save</button>
+</form>

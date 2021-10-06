@@ -1,0 +1,60 @@
+﻿@model List<Amazon.Entities.Category>
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container">
+
+
+    <div class="col-md-12">
+        <div class="title-section margin-bottom-52">
+            <h2 class="title">
+                All Categories
+            </h2>
+        </div>
+        <div class="product-content product-fourcolumn clearfix">
+            <ul class="product style2 clearfix">
+
+                @foreach (var category in Model)
+                {
+
+                    <li class="product-item">
+                        <div class="product-thumb clearfix">
+                            <a href="#" class="product-thumb">
+                                <img src="@category.ImageUrl" alt="image">
+                            </a>
+                        </div>
+                        <div class="product-info clearfix">
+                            <span class="product-title"></span>
+                            <div class="price">
+                                <ins>
+                                    @if (@category.isfeatured)
+                                    {
+                                        <span class="amount">Featured</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="amount">Not Featured</span>}
+                                </ins>
+                            </div>
+                            <ul class="flat-color-list width-14">
+                                <li>
+                                    <a href="#" class="red"></a>
+                                </li>
+                                <li>
+                                    <a href="#" class="blue"></a>
+                                </li>
+                                <li>
+                                    <a href="#" class="black"></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+

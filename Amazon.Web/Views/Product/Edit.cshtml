@@ -1,0 +1,101 @@
+﻿@model  Amazon.Web.Models.viewModels.ProductEditViewModels
+@{
+    ViewBag.Title = "Edit";
+
+
+}
+
+<div class="title-section">
+    <h2 class="title">
+        Edit Product
+    </h2>
+</div>
+
+
+<form id="editProduct">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-6">
+                <input type="hidden" name="ID" value="@Model.products.ID" />
+
+                <div class="form-group">
+                    <label for="Category">Category</label>
+                    <select name="CategoryID" class="form-control">
+
+                        @foreach (var category in Model.categories)
+                        {
+                            <option value="@category.ID">@category.Name</option>
+                        }
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input name="Name"
+                           class="form-control" id="Name" aria-describedby="nameHelp" placeholder="Enter Name"
+                           value="@Model.products.Name" />
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input name="Description"
+                           class="form-control" id="Description" aria-describedby="nameHelp" placeholder="Enter Description"
+                           value="@Model.products.Description" />
+                </div>
+
+                <div class="form-group">
+                    <label>Price</label>
+                    <input name="Price"
+                           class="form-control" id="Price" aria-describedby="nameHelp" placeholder="Enter Price"
+                           value="@Model.products.Price" />
+
+                </div>
+                <button id="updateBtn" type="button">Update</button>
+
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+
+                    <div class="thumb">
+                        <img src="~/Content/images/uploaded/12e4f4cb-340d-4239-b0ae-c91f7e610042.jpeg"
+                             style="width: 25%; height: 25%"
+                             class="img-thumbnail img-fluid" id="imgProduct" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    </div>
+
+
+</form>
+
+
+<script>
+    $("#updateBtn").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Product/Edit',
+            data: $("#editProduct").serialize()
+
+        })
+
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+                $("#actionContainer").html("")
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+                alert("FAIL");
+            })
+    });
+
+
+</script>

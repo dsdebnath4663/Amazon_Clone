@@ -1,0 +1,209 @@
+﻿
+@model  Amazon.Web.Models.viewModels.UsersSearchViewModels
+@{
+    ViewBag.Title = "ProductTable";
+}
+
+<link href="~/Content/stylesheets/datatables/dataTables.css" rel="stylesheet" />
+<script src="~/Content/javascript/datatables/js/jquery.dataTables.min.js"></script>
+
+
+
+
+<div class="container">
+    <!--showing all products in table-->
+    <div class="title-section">
+        <h2 class="title">
+            Products
+        </h2>
+    </div>
+    <div class="my-4">
+        <form method="post" class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input id="searchTxt" name="Search" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="button" id="searchBtn" class="btn-primary ">Search</button>
+                        <button type="button" id="newBtn" class="btn-primary ">New</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <table id="userTable" class="display" style="width:100%">
+        <thead>
+
+            <tr>
+                <td>Product Name</td>
+                <td>Password</td>
+                <td>Address</td>
+                <td>Address</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.usersList != null && Model.usersList.Count > 0)
+            {
+                foreach (var user in Model.usersList)
+                {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.password</td>
+                <td>@user.address</td>
+                <td>
+                    
+                    <img src="@user.usersImageUrl" class="img-thumbnail img-fluid image-list-view"  />
+                </td>
+
+
+                <td class="themesflat-button-custom">
+                    <button class="editButton  bg-accent" user-data-id="@user.ID" user="@user.ID">Edit</button>
+                    <button class="deleteBtn  bg-accent" user-data-id="@user.ID">Delete</button>
+                </td>
+            </tr>
+
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-danger" colspan="4">Users Not found</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+    <div>
+        @*   @if (Model.pageNumber != 1)
+            {
+                <button class="PreviousRecords" data-pageNo="@(Model.pageNumber - 1)">Previous</button>
+
+            }
+
+            <button class="NextRecords" data-pageNo="@(Model.pageNumber + 1)">Next</button>*@
+    </div>
+</div>
+
+<script>
+
+    $(".deleteBtn").click(function () {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Users/DeleteUsers',
+                        data: {
+                            ID: $(this).attr('user-data-id')
+                        }
+                    })
+                        .done(function (responce) {
+                            debugger;
+                            $("#tableContiner").html(responce);
+                            // location.reload();
+
+                            swal("Poof! Your imaginary file has been deleted!", {
+                                icon: "success",
+                            });
+
+                        })
+                        .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                            swal("Failed!", {
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: XMLHTTpRequest.responseText,
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            });
+                        })
+                }
+            });
+
+
+    });
+
+
+
+    $(".editButton").click(function () {
+        $.ajax({
+            url: '/Users/EditUsers',
+            data: {
+                ID: $(this).attr('user-data-id')
+            }
+        })
+            .done(function (responce) {
+                debugger;
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+
+
+    $("#searchBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Users/UserTable',
+            data: {
+                search: searchValue
+            }
+        })
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+    $("#newBtn").click(function () {
+
+        $.ajax({
+            url: '/Users/CreateUser',
+        })
+            .done(function (responce) {
+                $("#actionContainer").html(responce);
+               
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+
+
+
+    function focusAction() {
+        $('html,body').animata({
+            scrollTop: $("#actionContainer").offset().top - 100
+        }, 1000);
+    }
+</script>

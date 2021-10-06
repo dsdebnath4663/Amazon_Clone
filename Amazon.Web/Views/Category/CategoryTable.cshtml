@@ -1,0 +1,181 @@
+﻿@model  Amazon.Web.Models.viewModels.CategorySearchViewModels
+
+@{
+    ViewBag.Title = "CategoryTable";
+}
+
+
+<link href="~/Content/stylesheets/datatables/dataTables.css" rel="stylesheet" />
+<script src="~/Content/javascript/datatables/js/jquery.dataTables.min.js"></script>
+
+
+
+
+<div class="container">
+    <!--showing all products in table-->
+    <div class="title-section">
+        <h2 class="title">
+            Categories
+        </h2>
+    </div>
+    <div class="my-4">
+        <form method="post" class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input id=searchTxt name="Search" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="button" id="searchCategoryBtn" class="btn-primary ">Search</button>
+                        <button type="button" id="newCategoryBtn" class="btn-primary ">New</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <table id="categoryTable" class="display" style="width:100%">
+        <thead>
+
+            <tr>
+                <td>Product Name</td>
+                <td>Is Featured</td>
+
+                <td>Actions</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.categoryList != null && Model.categoryList.Count > 0)
+            {
+                foreach (var category in Model.categoryList)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <td>@category.isfeatured</td>
+
+                        <td class="themesflat-button-custom">
+                            <button class="editCategoryButton  bg-accent" category-data-id="@category.ID" category="@category.ID">Edit</button>
+                            <button class="deleteCategoryButton  bg-accent" category-data-id="@category.ID">Delete</button>
+                            <button class="addtocart bg-accent" category-data-id="@category.ID">Add To Cart</button>
+                        </td>
+                    </tr>
+
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-danger" colspan="4">Product Not found</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+    <div>
+        @*   @if (Model.pageNumber != 1)
+            {
+                <button class="PreviousRecords" data-pageNo="@(Model.pageNumber - 1)">Previous</button>
+
+            }
+
+            <button class="NextRecords" data-pageNo="@(Model.pageNumber + 1)">Next</button>*@
+    </div>
+</div>
+
+<script>
+    $('#categoryTable').DataTable();
+
+    $(".editCategoryButton").click(function () {
+        $.ajax({
+            url: '/Category/Edit',
+            data: {
+                ID: $(this).attr('category-data-id')
+            }
+        })
+            .done(function (responce) {
+                debugger;
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+    $("#newCategoryBtn").click(function () {
+
+        $.ajax({
+            url: '/Category/Create',
+        })
+            .done(function (responce) {
+               
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+   
+
+
+    $(".deleteCategoryButton").click(function () {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Category/Delete',
+                        data: {
+                            ID: $(this).attr('category-data-id')
+                        }
+                    })
+                        .done(function (responce) {
+                            debugger;
+                            $("#tableContiner").html(responce);
+                            // location.reload();
+
+                            swal("Poof! Your imaginary file has been deleted!", {
+                                icon: "success",
+                            });
+
+                        })
+                        .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                            
+                            debugger;
+                            alert("fd");
+
+                           
+                           @* swal("Failed!", {
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: XMLHTTpRequest.responseText,
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            });*@
+
+                        })
+                }
+            });
+
+
+    });
+
+
+    function focusAction() {
+        $('html,body').animate({
+            scrollTop: $("#actionContainer").offset().top - 100
+        }, 1000);
+    }
+</script>

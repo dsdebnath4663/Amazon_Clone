@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="title-section">
+    <h2 class="title">
+        Create Categories
+    </h2>
+</div>
+
+
+<form id="createCategory" class="container">
+
+
+
+    <div class="form-group">
+        <label>Name</label>
+        <input name="Name"
+               class="form-control" id="Name" aria-describedby="nameHelp" placeholder="Enter Name" />
+    </div>
+
+    <div class="form-group">
+        <label>Description</label>
+        <input name="Description"
+               class="form-control" id="Name" aria-describedby="nameHelp" placeholder="Enter Description" />
+    </div>
+
+
+    <div class="form-group">
+        <label for="isFeatured">Is Featured ?</label>
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="true">True
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="false">False
+    </div>
+
+
+
+    <label>Image</label>
+    <input id="imageUpload" name="Image" type="file" accept=".png, .jpg, .jpeg" />
+
+    <button type="submit" id="saveCategoryBtn">Save</button>
+
+    <div class="thumb">
+        <img id="categoryImg" />
+        <input id="ImageUrl" name="ImageUrl" type="hidden" />
+    </div>
+
+
+
+</form>
+
+<script> 
+    $("#saveCategoryBtn").click(function () {
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Category/Create',
+            data: $("#createCategory").serialize()
+        })
+            .done(function (responce) {
+                debugger;
+                $("#tableContiner").html(responce);
+                $("#actionContainer").html("")
+
+
+                swal("Comngratulations !! Product has been added !", {
+                    icon: "success",
+                });
+                reload();
+
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+                swal("Failed to save the item !!");
+            })
+
+    });
+
+    $("#imageUpload").change(function () {
+        debugger;
+        var element = this; // refer to file upload field
+        var formData = new FormData();// create new form data object
+        var totalFiles = element.files.length; // check total number of files in element
+
+        for (var i = 0; i < totalFiles; i++) { // initliazie files one by one
+            var file = element.files[i];
+            formData.append("Photo", file); // put value into form data
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/Shared/UploadImage',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+                debugger;
+                console.log(response);
+                if (response.Sucess == true) {
+                    $("#categoryImg").attr("src", response.ImageUrl);
+                    $("#ImageUrl").val(response.ImageUrl);
+                }
+
+
+
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            });
+
+    });
+   
+
+</script>

@@ -1,0 +1,150 @@
+﻿
+@model  Users
+@{
+    ViewBag.Title = "EditUsers";
+
+
+}
+
+<div class="title-section">
+    <h2 class="title">
+        Edit Users
+    </h2>
+</div>
+
+
+<form id="editUser">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-6">
+                <input type="hidden" name="ID" value="@Model.ID" />
+
+
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input name="Name"
+                           class="form-control" id="Name" aria-describedby="nameHelp"
+                           value="@Model.Name" />
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input name="address"
+                           class="form-control" id="address" aria-describedby="nameHelp"
+                           value="@Model.address" />
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input name="password"
+                           class="form-control" id="password" aria-describedby="nameHelp"
+                           value="@Model.password" />
+
+                </div>
+                <button id="updateBtn" type="button">Update</button>
+
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Image</label>
+                    <input id="imageUpload" name="Image" type="file" accept=".png, .jpg, .jpeg" />
+
+
+                    <div class="thumb">
+                        <img id="categoryImg" />
+                        <img src="@Model.usersImageUrl"
+                             style="width: 25%; height: 25%"
+                             class="img-thumbnail img-fluid" id="categoryImg" />
+
+                        <input id="ImageUrl" name="usersImageUrl" type="text" />
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    </div>
+
+
+</form>
+
+
+<script>
+    $("#updateBtn").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Users/EditUsers',
+            data: $("#editUser").serialize()
+
+        })
+
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+                $("#actionContainer").html("")
+
+                swal("Comngratulations !! User has been Updated !", {
+                    icon: "success",
+                });
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+
+    $("#imageUpload").change(function () {
+        debugger;
+        var element = this; // refer to file upload field
+        var formData = new FormData();// create new form data object
+        var totalFiles = element.files.length; // check total number of files in element
+
+        for (var i = 0; i < totalFiles; i++) { // initliazie files one by one
+            var file = element.files[i];
+            formData.append("Photo", file); // put value into form data
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/Shared/UploadImage',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+                debugger;
+                console.log(response);
+                if (response.Sucess == true) {
+                    $("#categoryImg").attr("src", response.ImageUrl);
+                    $("#ImageUrl").val(response.ImageUrl);
+                }
+
+
+
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            });
+
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿@model  Amazon.Web.Models.viewModels.HomeViewModels
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!-- IMAGE BOX -->
+<section class="flat-row row-image-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="wrap-carousel-box">
+                    <div class="flat-image-box flat-carousel-box has-arrows arrow-center bg-transparent offset-62 offset-v-24 style-1 data-effect div-h22 clearfix" data-auto="true" data-column="3" data-column2="2" data-column3="1" data-gap="30">
+                        <div class="owl-carousel owl-theme">
+
+                            @foreach (var featuredcategories in Model.Featuredcategories)
+                            {<div class="item data-effect-item">
+                                    <div class="inner">
+                                        <div class="thumb">
+                                            <img src="@featuredcategories.ImageUrl" alt="Image">
+                                            <div class="elm-btn">
+                                                <a href="#" class="themesflat-button bg-white width-150"> @featuredcategories.Name</a>
+                                            </div>
+                                            <div class="overlay-effect bg-color-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            </div> <!-- /.owl-carousel  -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container -->
+</section>

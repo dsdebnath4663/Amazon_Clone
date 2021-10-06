@@ -1,0 +1,17 @@
+﻿width: 100px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.themesflat-button-custom {
+    width: 29% !important;
+    text-transform: uppercase;
+    line-height: 18px;
+    color: white;
+}
+
+.image-list-view {
+    width: 9%;
+    height: 100%
+}

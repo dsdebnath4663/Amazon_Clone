@@ -1,0 +1,62 @@
+﻿@model Amazon.Entities.Category
+@{
+    ViewBag.Title = "Edit";
+
+    var trueChecked = Model.isfeatured ? "checked" : string.Empty;
+    var falseChecked = !Model.isfeatured ? "checked" : string.Empty;
+}
+
+<h2>Edit Category</h2>
+
+<form id="editCategory">
+
+    <input type="hidden" name="ID" value="@Model.ID" />
+
+    <label>Name</label>
+    <input name="Name" value="@Model.Name" />
+    <br />
+    <label>Description</label>
+    <input name="Description" value="@Model.Description" />
+    <br />
+    <div class="form-group">
+        <label for="isFeatured">Is Featured ?</label>
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" @trueChecked>True
+        <input type="radio" name="isfeatured" class="radio-inline form-check-input" @falseChecked>False
+    </div>
+
+
+
+    <button id="updateCategoryBtn" type="button">Update</button>
+</form>
+
+<script>
+    $("#updateCategoryBtn").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Category/Edit',
+            data: $("#editCategory").serialize()
+
+        })
+
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+                $("#actionContainer").html("")
+                swal("Comngratulations !! Product has been Updated !", {
+                    icon: "success",
+                });
+                reload();
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+          
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+
+</script>

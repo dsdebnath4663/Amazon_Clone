@@ -1,0 +1,97 @@
+﻿@model List<Category>
+@{
+    ViewBag.Title = "create";
+}
+
+<div class="title-section">
+    <h2 class="title">
+        Create Product
+    </h2>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="createProduct">
+
+                <label>Category</label>
+                <div class="form-group">
+                    <select name="CategoryID">
+                        @foreach (var Category in Model)
+                        {
+                            <option value="@Category.ID">@Category.Name</option>
+                        }
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Name</label>
+                    <input name="Name" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Description</label>
+                    <input name="Description" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Price</label>
+                    <input name="Price" class="form-control" />
+                </div>
+                <div class="themesflat-button-custom">
+                    <button id="saveBtn" type="button" class="  bg-accent">Save</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    
+</div>
+
+
+<script>
+    $("#saveBtn").click(function () {
+        swal({
+            title: "Are you want save new product?",
+            text: "Are you want save new product?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Product/Create',
+                        data: $("#createProduct").serialize()
+                    })
+                        .done(function (responce) {
+                            $("#tableContiner").html(responce);
+                            $("#actionContainer").html("")
+
+                            swal("Comngratulations !! Product has been added !", {
+                                icon: "success",
+                            });
+
+                        })
+                        .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+                            swal("Failed to save the item !!");
+                        })
+
+
+                }
+            });
+
+
+    });
+
+
+
+
+</script>

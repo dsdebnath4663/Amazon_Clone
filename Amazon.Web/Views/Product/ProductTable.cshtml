@@ -1,0 +1,252 @@
+﻿@*@model List<Product>*@
+
+@model  Amazon.Web.Models.viewModels.ProductSearchViewModels
+@{
+    ViewBag.Title = "ProductTable";
+}
+
+<link href="~/Content/stylesheets/datatables/dataTables.css" rel="stylesheet" />
+<script src="~/Content/javascript/datatables/js/jquery.dataTables.min.js"></script>
+
+
+
+
+<div class="container">
+    <!--showing all products in table-->
+    <div class="title-section">
+        <h2 class="title">
+            Products
+        </h2>
+    </div>
+    <div class="my-4">
+        <form method="post" class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input id=searchTxt name="Search" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="button" id="searchBtn"  class="btn-primary ">Search</button>
+                        <button type="button" id="newBtn"  class="btn-primary ">New</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <table id="productTable" class="display" style="width:100%">
+        <thead>
+
+            <tr>
+                <td>Product Name</td>
+                @*  <td>Category</td>*@
+                <td>Price</td>
+                <td>Description</td>
+                <td>Actions</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.productList != null && Model.productList.Count > 0)
+            {
+                foreach (var product in Model.productList)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        @* <td>
+                                @if (product.Category != null)
+                                {
+                                    <text>@product.Category.Name</text>
+
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+
+
+                            </td>*@
+                        <td>@product.Price</td>
+                        <td>@product.Description</td> 
+                        <td  class="themesflat-button-custom">
+                            <button class="editButton  bg-accent" data-id="@product.ID" product="@product.ID">Edit</button>
+                            <button class="deleteBtn  bg-accent" data-id="@product.ID">Delete</button>
+                            <button class="addtocart bg-accent" data-id="@product.ID">Add To Cart</button>
+                        </td>
+                    </tr>
+
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-danger" colspan="4">Product Not found</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+    <div>
+        @*   @if (Model.pageNumber != 1)
+            {
+                <button class="PreviousRecords" data-pageNo="@(Model.pageNumber - 1)">Previous</button>
+
+            }
+
+            <button class="NextRecords" data-pageNo="@(Model.pageNumber + 1)">Next</button>*@
+    </div>
+</div>
+
+<script>
+    $(".deleteBtn").click(function () {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Product/Delete',
+                        data: {
+                            ID: $(this).attr('data-id')
+                        }
+                    })
+                        .done(function (responce) {
+                            debugger;
+                            $("#tableContiner").html(responce);
+                            // location.reload();
+
+                            swal("Poof! Your imaginary file has been deleted!", {
+                                icon: "success",
+                            });
+
+                        })
+                        .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                            alert("FAIL");
+                        })
+                }
+            });
+
+
+    });
+
+    $('#productTable').DataTable();
+    
+
+    $(".editButton").click(function () {
+        $.ajax({
+            url: '/Product/Edit',
+            data: {
+                ID: $(this).attr('data-id')
+            }
+        })
+            .done(function (responce) {
+                debugger;
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+@*
+    $(".PreviousRecords").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Product/ProductTable',
+            data: {
+                pageNo: $(this).attr('data-pageNo')
+
+            }
+        })
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+    $(".NextRecords").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Product/ProductTable',
+            data: {
+
+                pageNo: $(this).attr('data-pageNo')
+
+            }
+        })
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });*@
+
+    $("#searchBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Product/ProductTable',
+            data: {
+               search: searchValue
+             //   pageNo: $(this).attr(data-pageNo)
+            }
+        })
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+    $("#newBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Product/Create',
+        })
+            .done(function (responce) {
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+
+
+    var products = [];
+
+    $(".addtocart").click(function () {
+        var productID = $(this).attr('data-id');
+
+        products.push(productID);
+
+        $.cookie('CartProducts', products.join('-'), { path :'/'});
+
+        swal("Product added to cart. !", {
+            icon: "success",
+        });
+    });
+
+    function focusAction() {
+        $('html,body').animata({
+            scrollTop:$("#actionContainer").offset().top -100
+            }, 1000);
+    }
+</script>
