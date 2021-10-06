@@ -83,8 +83,6 @@ namespace Amazon.Web.Controllers
             return RedirectToAction("ProductTable");
         }
 
-
-
         [HttpPost]
         public ActionResult Delete(Product product)
 
