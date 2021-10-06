@@ -12,8 +12,6 @@ namespace Amazon.Web.Controllers
     public class ProductController : Controller
     {
 
-        //ProductService productsService = new ProductService();
-
         // GET: Product
         public ActionResult Index()
         {
@@ -23,8 +21,6 @@ namespace Amazon.Web.Controllers
         {
             ProductSearchViewModels model = new ProductSearchViewModels();
 
-            /*            model.pageNumber = pageNo.HasValue ? pageNo.Value : 1;
-            */
             model.pageNumber = pageNo.HasValue ? pageNo.Value>0 ? pageNo.Value : 1 : 1;
             model.productList = ProductService.Instance.GetProductsByPageNo(model.pageNumber);
 
