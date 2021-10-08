@@ -1,15 +1,10 @@
 ﻿@model  Amazon.Web.Models.viewModels.CategorySearchViewModels
-
 @{
     ViewBag.Title = "CategoryTable";
 }
 
-
 <link href="~/Content/stylesheets/datatables/dataTables.css" rel="stylesheet" />
 <script src="~/Content/javascript/datatables/js/jquery.dataTables.min.js"></script>
-
-
-
 
 <div class="container">
     <!--showing all products in table-->
@@ -28,8 +23,8 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <button type="button" id="searchCategoryBtn" class="btn-primary ">Search</button>
-                        <button type="button" id="newCategoryBtn" class="btn-primary ">New</button>
+                        <button type="button" id="searchBtn" class="btn-primary ">Search</button>
+                        <button type="button" id="newBtn" class="btn-primary ">New</button>
 
                     </div>
                 </div>
@@ -38,13 +33,12 @@
         </form>
     </div>
 
-    <table id="categoryTable" class="display" style="width:100%">
+    <table id="productTable" class="display" style="width:100%">
         <thead>
 
             <tr>
-                <td>Product Name</td>
-                <td>Is Featured</td>
-
+                <td>Category Name</td>
+                <td>Description</td>
                 <td>Actions</td>
 
             </tr>
@@ -55,13 +49,12 @@
                 foreach (var category in Model.categoryList)
                 {
                     <tr>
-                        <td>@category.Name</td>
-                        <td>@category.isfeatured</td>
-
+                        <td>@category.Name</td>                    
+                        <td>@category.Description</td>
                         <td class="themesflat-button-custom">
-                            <button class="editCategoryButton  bg-accent" category-data-id="@category.ID" category="@category.ID">Edit</button>
-                            <button class="deleteCategoryButton  bg-accent" category-data-id="@category.ID">Delete</button>
-                            <button class="addtocart bg-accent" category-data-id="@category.ID">Add To Cart</button>
+                            <button class="editButton  bg-accent" data-id="@category.ID" product="@category.ID">Edit</button>
+                            <button class="deleteBtn  bg-accent" data-id="@category.ID">Delete</button>
+                            <button class="addtocart bg-accent" data-id="@category.ID">Add To Cart</button>
                         </td>
                     </tr>
 
@@ -89,42 +82,7 @@
 </div>
 
 <script>
-    $('#categoryTable').DataTable();
-
-    $(".editCategoryButton").click(function () {
-        $.ajax({
-            url: '/Category/Edit',
-            data: {
-                ID: $(this).attr('category-data-id')
-            }
-        })
-            .done(function (responce) {
-                debugger;
-                $("#actionContainer").html(responce);
-            })
-            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-                alert("FAIL");
-            })
-    });
-
-    $("#newCategoryBtn").click(function () {
-
-        $.ajax({
-            url: '/Category/Create',
-        })
-            .done(function (responce) {
-               
-                $("#actionContainer").html(responce);
-            })
-            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-                alert("FAIL");
-            })
-    });
-
-   
-
-
-    $(".deleteCategoryButton").click(function () {
+    $(".deleteBtn").click(function () {
         swal({
             title: "Are you sure?",
             text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -139,7 +97,7 @@
                         type: 'POST',
                         url: '/Category/Delete',
                         data: {
-                            ID: $(this).attr('category-data-id')
+                            ID: $(this).attr('data-id')
                         }
                     })
                         .done(function (responce) {
@@ -153,18 +111,12 @@
 
                         })
                         .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-                            
-                            debugger;
-                            alert("fd");
-
-                           
-                           @* swal("Failed!", {
+                            swal("Failed!", {
                                 icon: 'error',
                                 title: 'Oops...',
                                 text: XMLHTTpRequest.responseText,
                                 footer: '<a href="">Why do I have this issue?</a>'
-                            });*@
-
+                            });
                         })
                 }
             });
@@ -172,10 +124,91 @@
 
     });
 
+    $('#productTable').DataTable();
+
+
+    $(".editButton").click(function () {
+        $.ajax({
+            url: '/Category/Edit',
+            data: {
+                ID: $(this).attr('data-id')
+            }
+        })
+            .done(function (responce) {
+                debugger;
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+
+    $("#searchBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Category/CategoryTable',
+            data: {
+               search: searchValue
+            }
+        })
+            .done(function (responce) {
+                $("#tableContiner").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+    $("#newBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '/Product/Create',
+        })
+            .done(function (responce) {
+                $("#actionContainer").html(responce);
+            })
+            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            })
+    });
+
+
+
+    var products = [];
+
+    $(".addtocart").click(function () {
+        var productID = $(this).attr('data-id');
+
+        products.push(productID);
+
+        $.cookie('CartProducts', products.join('-'), { path :'/'});
+
+        swal("Product added to cart. !", {
+            icon: "success",
+        });
+    });
 
     function focusAction() {
-        $('html,body').animate({
-            scrollTop: $("#actionContainer").offset().top - 100
-        }, 1000);
+        $('html,body').animata({
+            scrollTop:$("#actionContainer").offset().top -100
+            }, 1000);
     }
 </script>

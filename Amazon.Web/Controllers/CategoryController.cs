@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static Amazon.Web.Models.viewModels.BaseListingViewModel;
+using System.Data.Entity;
+
+
 
 namespace Amazon.Web.Controllers
 {
@@ -17,48 +21,32 @@ namespace Amazon.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-             return View();
+            return View();
         }
 
-        #region Creation
 
         [HttpGet]
         public ActionResult Create()
         {
-             return PartialView();
+            return PartialView();
 
         }
         [HttpPost]
         public ActionResult Create(CategoryViewModels models)
 
         {
-            /*CategoryServices.Instance.SaveCategory(Category);*/
             var newCategory = new Category();
 
             newCategory.Name = models.Name;
             newCategory.Description = models.Description;
             newCategory.ImageUrl = models.ImageUrl;
-
             newCategory.isfeatured = models.isfeatured;
 
-            CategoryServices.Instance.SaveCategory (newCategory);
+            CategoryServices.Instance.SaveCategory(newCategory);
             return RedirectToAction("CategoryTable");
 
         }
-/*        [HttpGet]
-        public ActionResult Delete(int ID)
 
-        {
-            var category = CategoryServices.Instance.GetCategory(ID);
-            return View(category);
-        }
-        [HttpPost]
-        public ActionResult Delete1(int ID)
-
-        {
-            var category = CategoryServices.Instance.GetCategory(ID);
-            return View(category);
-        }*/
         [HttpPost]
         public ActionResult Delete(Category category)
 
@@ -68,16 +56,15 @@ namespace Amazon.Web.Controllers
             return RedirectToAction("CategoryTable");
         }
 
-        #endregion
 
         #region Updation
 
         [HttpGet]
         public ActionResult Edit(int ID)
         {
-             var category = CategoryServices.Instance.GetCategory(ID);
+            var category = CategoryServices.Instance.GetCategory(ID);
 
-              return PartialView(category);
+            return PartialView(category);
         }
 
 
@@ -96,23 +83,29 @@ namespace Amazon.Web.Controllers
 
 
 
-        public ActionResult CategoryTable(String Search, int? pageNo)
+        public ActionResult CategoryTable(string Search, int? pageNo)
         {
             CategorySearchViewModels model = new CategorySearchViewModels();
 
-            model.categoryList = CategoryServices.Instance.GetCategories();
+            model.searchKeyword = Search;
+            model.categoryList = CategoryServices.Instance.GetCategoriesByPageNoAndSearchKeyWord(pageNo, Search);
+            int totalItems = model.categoryList.Count;
 
-            if (string.IsNullOrEmpty(Search) == false)
+
+            if (model.categoryList != null)
             {
-                model.searchKeyword = Search;
-                model.categoryList = model.categoryList
-                                         .Where(p => p.Name != null &&
-                                                   (p.Name).ToLowerInvariant().Contains(Search.ToLowerInvariant()))
-                                         .ToList();
+
+                model.pager = new Pager(totalItems, pageNo);
+
+               return PartialView("CategoryTable", model);
+              //  return PartialView(model);
+
+
             }
-
-
-            return PartialView(model);
+            else
+            {
+                return HttpNotFound();
+            }
         }
         #endregion
 

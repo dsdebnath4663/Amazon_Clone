@@ -17,7 +17,7 @@ namespace Amazon.Web.Controllers
         {
             return View();
         }
-        public ActionResult ProductTable(String Search, int? pageNo)
+    public ActionResult ProductTable(String Search, int? pageNo)
         {
             ProductSearchViewModels model = new ProductSearchViewModels();
 
