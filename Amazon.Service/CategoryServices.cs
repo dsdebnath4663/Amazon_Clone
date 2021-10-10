@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Data.
+    Entity;
 namespace Amazon.Service
 {
     public class CategoryServices
@@ -43,11 +44,42 @@ namespace Amazon.Service
                 return context.Categories.ToList();
             }
         }
+        public List<Category> GetCategoriesByPageNoAndSearchKeyWord(int? pageNo, string Search)
+        {
+            using (var context = new AmazonContext())
+            {
+                int page = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+                int pageSize = int.Parse(ConfigurationService.Instance.GetConfig("ListingPageSize").Value);
+
+
+                if (!string.IsNullOrEmpty(Search))
+                {
+                    return context
+                        .Categories.Where(category => category.Name != null && category.Name.ToLower()
+                                   .Contains(Search.ToLower()))
+                                   .OrderBy(x => x.ID)
+                                   .Skip((page - 1) * pageSize)
+                                   .Include(x => x.Products)
+                                   .Take(pageSize)
+                                   .ToList();
+
+                }
+                else
+                {
+                    return context.Categories.OrderBy(x => x.ID)
+                                 .Skip((page - 1) * pageSize)
+                                 //  .Include(x => x.Products)
+                                 .Take(pageSize)
+                                 .ToList();
+                }
+
+            }
+        }
         public List<Category> GetFeaturedCategories()
         {
             using (var context = new AmazonContext())
             {
-                return context.Categories.Where(x=> x.isfeatured).ToList();
+                return context.Categories.Where(x => x.isfeatured).ToList();
             }
         }
 
@@ -66,7 +98,7 @@ namespace Amazon.Service
                 context.SaveChanges();
             }
         }
-        public void Updatecategory (Category category)
+        public void Updatecategory(Category category)
         {   //  using(var context= new AmazonContext()) 
             using (var context = new AmazonContext())
 
@@ -104,7 +136,29 @@ namespace Amazon.Service
                 context.SaveChanges();
             }
         }
+
+        public int GetCategoriesCount(int? pageNo, string Search)
+        {
+            using (var context = new AmazonContext())
+            {
+               
+
+                if (!string.IsNullOrEmpty(Search))
+                {
+                    return context
+                        .Categories.Where(category => category.Name != null && category.Name.ToLower()
+                                   .Contains(Search.ToLower()))
+                                  
+                                   .Count();
+                }
+                else
+                {
+                    return context.Categories
+                                   .Count();
+                }
+            }
+        }
+
+
     }
-
-
 }

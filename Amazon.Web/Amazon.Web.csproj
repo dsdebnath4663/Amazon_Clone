@@ -137,6 +137,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\viewModels\CategorySearchViewModels.cs" />
+    <Compile Include="Models\viewModels\BaseListingViewModel.cs" />
     <Compile Include="Models\viewModels\UsersSearchViewModels.cs" />
     <Compile Include="Models\viewModels\ProductViewModels .cs" />
     <Compile Include="Models\viewModels\ProductSearchViewModels.cs" />
@@ -484,6 +485,7 @@
     <Content Include="Views\Users\CreateUser.cshtml" />
     <Content Include="Views\Users\EditUsers.cshtml" />
     <Content Include="Views\Product\ProductTable.cshtml" />
+    <Content Include="Views\Shared\_Layout - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

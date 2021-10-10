@@ -3,6 +3,7 @@ using Amazon.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 
 namespace Amazon.Web.Controllers
 {
@@ -51,6 +52,7 @@ namespace Amazon.Web.Controllers
             {
                 return context.Products
                              .OrderBy(x => x.Name)
+                             //.Include(x => x.Category)
                              .ToList();//.Include(x => x.Category)
 
                 /* return context.Products
