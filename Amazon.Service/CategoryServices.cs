@@ -52,7 +52,7 @@ namespace Amazon.Service
                 int pageSize = int.Parse(ConfigurationService.Instance.GetConfig("ListingPageSize").Value);
 
 
-               if (!string.IsNullOrEmpty(Search))
+                if (!string.IsNullOrEmpty(Search))
                 {
                     return context
                         .Categories.Where(category => category.Name != null && category.Name.ToLower()
@@ -68,14 +68,10 @@ namespace Amazon.Service
                 {
                     return context.Categories.OrderBy(x => x.ID)
                                  .Skip((page - 1) * pageSize)
-                               //  .Include(x => x.Products)
+                                 //  .Include(x => x.Products)
                                  .Take(pageSize)
                                  .ToList();
-               }
-
-
-              
-
+                }
 
             }
         }
@@ -140,7 +136,29 @@ namespace Amazon.Service
                 context.SaveChanges();
             }
         }
+
+        public int GetCategoriesCount(int? pageNo, string Search)
+        {
+            using (var context = new AmazonContext())
+            {
+               
+
+                if (!string.IsNullOrEmpty(Search))
+                {
+                    return context
+                        .Categories.Where(category => category.Name != null && category.Name.ToLower()
+                                   .Contains(Search.ToLower()))
+                                  
+                                   .Count();
+                }
+                else
+                {
+                    return context.Categories
+                                   .Count();
+                }
+            }
+        }
+
+
     }
-
-
 }

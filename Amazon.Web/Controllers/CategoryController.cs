@@ -21,6 +21,7 @@ namespace Amazon.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -28,7 +29,10 @@ namespace Amazon.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return PartialView();
+            CategorySearchViewModels model = new CategorySearchViewModels();
+            model.categoryList = CategoryServices.Instance.GetCategories();
+
+            return PartialView(model);
 
         }
         [HttpPost]
@@ -89,18 +93,15 @@ namespace Amazon.Web.Controllers
 
             model.searchKeyword = Search;
             model.categoryList = CategoryServices.Instance.GetCategoriesByPageNoAndSearchKeyWord(pageNo, Search);
-            int totalItems = model.categoryList.Count;
+            int totalItems = CategoryServices.Instance.GetCategoriesCount(pageNo, Search);
 
 
             if (model.categoryList != null)
             {
 
-                model.pager = new Pager(totalItems, pageNo);
-
+                model.pager = new Pager(totalItems, pageNo,4);
+            
                return PartialView("CategoryTable", model);
-              //  return PartialView(model);
-
-
             }
             else
             {

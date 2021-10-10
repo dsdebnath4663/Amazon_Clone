@@ -31,6 +31,7 @@ namespace Amazon.Web.Models.viewModels
                 var endPage = currentPage + 4;
                 if (startPage <= 0)
                 {
+                    
                     endPage -= (startPage - 1);
                     startPage = 1;
                 }
@@ -49,6 +50,7 @@ namespace Amazon.Web.Models.viewModels
                 TotalPages = totalPages;
                 StartPage = startPage;
                 EndPage = endPage;
+            
             }
 
             public int TotalItems { get; private set; }

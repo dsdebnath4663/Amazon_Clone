@@ -33,7 +33,7 @@
         </form>
     </div>
 
-    <table id="productTable" class="display" style="width:100%">
+    <table id="productTable" class="table table-bordered">
         <thead>
 
             <tr>
@@ -49,12 +49,11 @@
                 foreach (var category in Model.categoryList)
                 {
                     <tr>
-                        <td>@category.Name</td>                    
+                        <td>@category.Name</td>
                         <td>@category.Description</td>
                         <td class="themesflat-button-custom">
-                            <button class="editButton  bg-accent" data-id="@category.ID" product="@category.ID">Edit</button>
+                            <button class="editButton  bg-accent" data-id="@category.ID" category="@category.ID">Edit</button>
                             <button class="deleteBtn  bg-accent" data-id="@category.ID">Delete</button>
-                            <button class="addtocart bg-accent" data-id="@category.ID">Add To Cart</button>
                         </td>
                     </tr>
 
@@ -71,17 +70,42 @@
 
     </table>
     <div>
-        @*   @if (Model.pageNumber != 1)
-            {
-                <button class="PreviousRecords" data-pageNo="@(Model.pageNumber - 1)">Previous</button>
+        @if (Model.pager != null)
+        {
 
+
+
+            if (Model.pager.CurrentPage > 1)
+            {
+                <button class="PreviousRecords" data-pageno="1">First</button>
+                <button class="PreviousRecords" data-pageno="@(Model.pager.CurrentPage-1)">Previous</button>
             }
 
-            <button class="NextRecords" data-pageNo="@(Model.pageNumber + 1)">Next</button>*@
+            for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+            {
+                string activeClass = Model.pager.CurrentPage == page ? "active bg-info" : string.Empty;
+
+                <button class="@activeClass  PreviousRecords" data-pageno="@page">@page</button>
+            }
+
+          
+
+            if (Model.pager.CurrentPage < Model.pager.EndPage)
+            {
+
+                <button class="PreviousRecords" data-pageno="@(Model.pager.CurrentPage + 1 )"> Next</button>
+                <button class="PreviousRecords" data-pageno="@Model.pager.EndPage">Last</button>
+            }
+
+        }
+
     </div>
+
 </div>
 
 <script>
+    @* $('#productTable').DataTable();*@
+
     $(".deleteBtn").click(function () {
         swal({
             title: "Are you sure?",
@@ -124,7 +148,7 @@
 
     });
 
-    $('#productTable').DataTable();
+
 
 
     $(".editButton").click(function () {
@@ -148,12 +172,35 @@
             })
     });
 
+    $(".PreviousRecords").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '@Url.Action("CategoryTable", "Category")',
+            data: {
+                pageNo: $(this).attr("data-pageno"),
+                search: '@Model.searchKeyword'
+            }
+        }).done(function (responce) {
+            $("#tableContiner").html(responce);
+        }).fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+            swal("Failed!", {
+                icon: 'error',
+                title: 'Oops...',
+                text: XMLHTTpRequest.responseText,
+                footer: '<a href="">Why do I have this issue?</a>'
+            });
+        })
+    });
+
 
     $("#searchBtn").click(function () {
         var searchValue = $("#searchTxt").val();
 
         $.ajax({
-            url: '/Category/CategoryTable',
+@*            url: '/Category/CategoryTable',
+*@
+            url: '@Url.Action("CategoryTable", "Category")',
             data: {
                search: searchValue
             }
@@ -175,7 +222,7 @@
         var searchValue = $("#searchTxt").val();
 
         $.ajax({
-            url: '/Product/Create',
+            url: '/Category/Create',
         })
             .done(function (responce) {
                 $("#actionContainer").html(responce);
@@ -206,7 +253,7 @@
         });
     });
 
-    function focusAction() {
+   function focusAction() {
         $('html,body').animata({
             scrollTop:$("#actionContainer").offset().top -100
             }, 1000);
