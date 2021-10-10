@@ -9,55 +9,98 @@
     </h2>
 </div>
 
+<div class="container">
 
-<form id="createCategory" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form id="createCategory">
+
+                <div class="form-group">
+                    <label class="col-form-label">Name</label>
+                    <input name="Name" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label">Description</label>
+                    <input name="Description" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label for="isFeatured">Is Featured ?</label>
+                    <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="true">True
+                    <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="false">False
+                </div>
+                <label>Image</label>
+                <input id="imageUpload" name="Image" type="file" accept=".png, .jpg, .jpeg" />
 
 
+                <div class="thumb">
+                    <img id="categoryImg" />
+                    <input id="ImageUrl" name="ImageUrl" type="hidden" />
+                </div>
 
-    <div class="form-group">
-        <label>Name</label>
-        <input name="Name"
-               class="form-control" id="Name" aria-describedby="nameHelp" placeholder="Enter Name" />
+                <div class="themesflat-button-custom">
+                    <button id="saveCategoryBtn" type="button" class="  bg-accent">Save</button>
+
+                </div>
+            </form>
+        </div>
+
     </div>
 
-    <div class="form-group">
-        <label>Description</label>
-        <input name="Description"
-               class="form-control" id="Name" aria-describedby="nameHelp" placeholder="Enter Description" />
-    </div>
+</div>
 
 
-    <div class="form-group">
-        <label for="isFeatured">Is Featured ?</label>
-        <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="true">True
-        <input type="radio" name="isfeatured" class="radio-inline form-check-input" value="false">False
-    </div>
+<script>
 
-
-
-    <label>Image</label>
-    <input id="imageUpload" name="Image" type="file" accept=".png, .jpg, .jpeg" />
-
-    <button type="submit" id="saveCategoryBtn">Save</button>
-
-    <div class="thumb">
-        <img id="categoryImg" />
-        <input id="ImageUrl" name="ImageUrl" type="hidden" />
-    </div>
-
-
-
-</form>
-
-<script> 
     $("#saveCategoryBtn").click(function () {
+        swal({
+            title: "Are you want save new Category?",
+            text: "Are you want save new Category?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Category/Create',
+                        data: $("#createCategory").serialize()
+                    })
+                        .done(function (responce) {
+                            $("#tableContiner").html(responce);
+                            $("#actionContainer").html("")
+
+                            swal("Congratulations !! Category has been added !", {
+                                icon: "success",
+                            });
+
+                        })
+                        .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
+
+                            swal("Failed!", {
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: XMLHTTpRequest.responseText,
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            });
+                        })
+
+
+                }
+            });
+
+
+    });
+   @* $("#saveCategoryBtn").click(function () {
 
 
 
         $.ajax({
             type: 'POST',
             url: '/Category/Create',
-            data: $("#createCategory").serialize()
+            data: $("#createCategory1").serialize()
         })
             .done(function (responce) {
                 debugger;
@@ -65,18 +108,22 @@
                 $("#actionContainer").html("")
 
 
-                swal("Comngratulations !! Product has been added !", {
+                swal("Comngratulations !! Category has been added !", {
                     icon: "success",
                 });
-                reload();
+                //reload();
 
             })
             .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
 
-                swal("Failed to save the item !!");
-            })
+                swal("Failed!", {
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: XMLHTTpRequest.responseText,
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });            })
 
-    });
+    });*@
 
     $("#imageUpload").change(function () {
         debugger;
@@ -119,6 +166,6 @@
             });
 
     });
-   
+
 
 </script>

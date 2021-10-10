@@ -44,14 +44,14 @@
                 swal("Comngratulations !! Product has been Updated !", {
                     icon: "success",
                 });
-                reload();
+              
             })
             .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
 
           
                 swal("Failed!", {
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Oops... Kindly try after sometime.',
                     text: XMLHTTpRequest.responseText,
                     footer: '<a href="">Why do I have this issue?</a>'
                 });

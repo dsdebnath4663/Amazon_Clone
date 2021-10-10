@@ -63,8 +63,6 @@
         })
             .then((willDelete) => {
                 if (willDelete) {
-
-
                     $.ajax({
                         type: 'POST',
                         url: '/Product/Create',
@@ -73,10 +71,14 @@
                         .done(function (responce) {
                             $("#tableContiner").html(responce);
                             $("#actionContainer").html("")
-
-                            swal("Comngratulations !! Product has been added !", {
-                                icon: "success",
-                            });
+                            setTimeout(
+                                function () {
+                                    //do something special
+                                    swal("Comngratulations !! Product has been added !", {
+                                        icon: "success",
+                                    });
+                                }, 1115000);
+                           
 
                         })
                         .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
