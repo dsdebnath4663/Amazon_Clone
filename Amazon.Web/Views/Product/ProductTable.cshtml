@@ -6,8 +6,6 @@
 }
 
 <link href="~/Content/stylesheets/datatables/dataTables.css" rel="stylesheet" />
-<script src="~/Content/javascript/datatables/js/jquery.dataTables.min.js"></script>
-
 
 <div class="container">
     <!--showing all products in table-->
@@ -137,9 +135,7 @@
 
 
     });
-
-    $('#productTable').DataTable();
-    
+ 
 
     $(".editButton").click(function () {
         $.ajax({
@@ -157,42 +153,6 @@
             })
     });
 
-@*
-    $(".PreviousRecords").click(function () {
-        var searchValue = $("#searchTxt").val();
-
-        $.ajax({
-            url: '/Product/ProductTable',
-            data: {
-                pageNo: $(this).attr('data-pageNo')
-
-            }
-        })
-            .done(function (responce) {
-                $("#tableContiner").html(responce);
-            })
-            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-                alert("FAIL");
-            })
-    });
-    $(".NextRecords").click(function () {
-        var searchValue = $("#searchTxt").val();
-
-        $.ajax({
-            url: '/Product/ProductTable',
-            data: {
-
-                pageNo: $(this).attr('data-pageNo')
-
-            }
-        })
-            .done(function (responce) {
-                $("#tableContiner").html(responce);
-            })
-            .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-                alert("FAIL");
-            })
-    });*@
 
     $("#searchBtn").click(function () {
         var searchValue = $("#searchTxt").val();
@@ -201,7 +161,6 @@
             url: '/Product/ProductTable',
             data: {
                search: searchValue
-             //   pageNo: $(this).attr(data-pageNo)
             }
         })
             .done(function (responce) {

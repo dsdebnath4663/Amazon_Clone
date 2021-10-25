@@ -16,7 +16,6 @@ namespace Amazon.Web.Controllers
 
             homeViewModels.Featuredcategories = CategoryServices.Instance.GetFeaturedCategories();
 
-
             return View(homeViewModels);
         }
 

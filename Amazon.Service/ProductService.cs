@@ -3,6 +3,7 @@ using Amazon.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 
 namespace Amazon.Web.Controllers
 {
@@ -46,11 +47,13 @@ namespace Amazon.Web.Controllers
         public List<Product> GetProductsByPageNo(int pageNo)
 
         {
-            int pageSize = 10;
+        // int pageSize = 10;
+
             using (var context = new AmazonContext())
             {
                 return context.Products
                              .OrderBy(x => x.Name)
+                             //.Include(x => x.Category)
                              .ToList();//.Include(x => x.Category)
 
                 /* return context.Products
@@ -62,7 +65,37 @@ namespace Amazon.Web.Controllers
 
         }
 
-        public List<Product> GetProducts()
+        public List<Product> GetProductsByPageNo(int pageNo, int pageSize)
+
+        {
+            using (var context = new AmazonContext())
+            {
+                return context.Products
+                             .OrderByDescending(x => x.Name)
+                             .ToList();//.Include(x => x.Category)
+
+                 //return context.Products
+                 //              .OrderBy(x => x.Name)
+                 //              .Skip((pageNo - 1) * pageSize)
+                 //              .Take(pageSize)
+                 //              .ToList();//.Include(x => x.Category)
+            }
+
+        }
+
+        public List<Product> GetLatestProducts(int numberofProducts)
+        {
+            using (var context = new AmazonContext())
+            {
+                return context.Products
+                              .OrderByDescending(x => x.ID)
+                              .Take(numberofProducts)
+                              .Include(x => x.Category).ToList();
+            }
+
+        }
+
+        public List<Product> GetProducts(int v, int v1)
         {
             var context = new AmazonContext();
 

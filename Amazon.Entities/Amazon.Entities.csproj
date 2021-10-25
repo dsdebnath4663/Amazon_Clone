@@ -56,6 +56,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="requiredAttribute.cs" />
     <Compile Include="Users.cs" />
   </ItemGroup>
   <ItemGroup>

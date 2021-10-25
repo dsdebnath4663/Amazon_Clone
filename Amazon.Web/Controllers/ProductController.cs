@@ -12,20 +12,16 @@ namespace Amazon.Web.Controllers
     public class ProductController : Controller
     {
 
-        //ProductService productsService = new ProductService();
-
         // GET: Product
         public ActionResult Index()
         {
             return View();
         }
-        public ActionResult ProductTable(String Search, int? pageNo)
+    public ActionResult ProductTable(String Search, int? pageNo)
         {
             ProductSearchViewModels model = new ProductSearchViewModels();
 
-            /*            model.pageNumber = pageNo.HasValue ? pageNo.Value : 1;
-            */
-            model.pageNumber = pageNo.HasValue ? pageNo.Value>0 ? pageNo.Value : 1 : 1;
+            model.pageNumber = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
             model.productList = ProductService.Instance.GetProductsByPageNo(model.pageNumber);
 
             if (string.IsNullOrEmpty(Search) == false)
@@ -52,15 +48,14 @@ namespace Amazon.Web.Controllers
 
         [HttpPost]
         public ActionResult Create(ProductViewModels models)
-
         {
-
             var newProduct = new Product();
 
             newProduct.Name = models.Name;
             newProduct.Price = models.Price;
             newProduct.Description = models.Description;
             newProduct.Category = CategoryServices.Instance.GetCategory(models.CategoryID);
+            newProduct.Description = models.Description;
 
             ProductService.Instance.SaveProduct(newProduct);
 
@@ -86,8 +81,6 @@ namespace Amazon.Web.Controllers
 
             return RedirectToAction("ProductTable");
         }
-
-
 
         [HttpPost]
         public ActionResult Delete(Product product)
