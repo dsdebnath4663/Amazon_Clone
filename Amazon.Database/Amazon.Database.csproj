@@ -52,29 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonContext.cs" />
-    <Compile Include="Migrations\202109031525374_initial.cs" />
-    <Compile Include="Migrations\202109031525374_initial.designer.cs">
-      <DependentUpon>202109031525374_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202109251635365_ImageUrlAdded.cs" />
-    <Compile Include="Migrations\202109251635365_ImageUrlAdded.designer.cs">
-      <DependentUpon>202109251635365_ImageUrlAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202109281355063_addedIsfeatured.cs" />
-    <Compile Include="Migrations\202109281355063_addedIsfeatured.designer.cs">
-      <DependentUpon>202109281355063_addedIsfeatured.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110010337165_configurationstable.cs" />
-    <Compile Include="Migrations\202110010337165_configurationstable.designer.cs">
-      <DependentUpon>202110010337165_configurationstable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110040419555_initialized.cs" />
-    <Compile Include="Migrations\202110040419555_initialized.designer.cs">
-      <DependentUpon>202110040419555_initialized.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110041518446_initialized1.cs" />
-    <Compile Include="Migrations\202110041518446_initialized1.designer.cs">
-      <DependentUpon>202110041518446_initialized1.cs</DependentUpon>
+    <Compile Include="Migrations\202110201615063_productImageUrl-has-been-added.cs" />
+    <Compile Include="Migrations\202110201615063_productImageUrl-has-been-added.designer.cs">
+      <DependentUpon>202110201615063_productImageUrl-has-been-added.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,23 +70,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202109031525374_initial.resx">
-      <DependentUpon>202109031525374_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202109251635365_ImageUrlAdded.resx">
-      <DependentUpon>202109251635365_ImageUrlAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202109281355063_addedIsfeatured.resx">
-      <DependentUpon>202109281355063_addedIsfeatured.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110010337165_configurationstable.resx">
-      <DependentUpon>202110010337165_configurationstable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110040419555_initialized.resx">
-      <DependentUpon>202110040419555_initialized.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110041518446_initialized1.resx">
-      <DependentUpon>202110041518446_initialized1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202110201615063_productImageUrl-has-been-added.resx">
+      <DependentUpon>202110201615063_productImageUrl-has-been-added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

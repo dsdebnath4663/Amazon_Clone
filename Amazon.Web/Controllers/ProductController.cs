@@ -55,6 +55,7 @@ namespace Amazon.Web.Controllers
             newProduct.Price = models.Price;
             newProduct.Description = models.Description;
             newProduct.Category = CategoryServices.Instance.GetCategory(models.CategoryID);
+            newProduct.Description = models.Description;
 
             ProductService.Instance.SaveProduct(newProduct);
 

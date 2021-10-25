@@ -9,6 +9,10 @@ namespace Amazon.Web.Controllers
 {
     public class ShopController : Controller
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
         public ActionResult checkout()
         {
             CheckoutViewModels model = new CheckoutViewModels();

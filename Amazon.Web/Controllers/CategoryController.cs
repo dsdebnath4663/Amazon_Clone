@@ -16,7 +16,7 @@ namespace Amazon.Web.Controllers
 {
     public class CategoryController : Controller
     {
-
+        public object CategoriesServices { get; private set; }
 
         [HttpGet]
         public ActionResult Index()
@@ -31,24 +31,33 @@ namespace Amazon.Web.Controllers
         {
             CategorySearchViewModels model = new CategorySearchViewModels();
             model.categoryList = CategoryServices.Instance.GetCategories();
-
             return PartialView(model);
-
         }
-        [HttpPost]
+        [HttpPost] 
         public ActionResult Create(CategoryViewModels models)
 
         {
-            var newCategory = new Category();
+            if (ModelState.IsValid)
+            {
+                var newCategory = new Category();
+                newCategory.Name = models.Name;
+                newCategory.Description = models.Description;
+                newCategory.ImageUrl = models.ImageUrl;
+                newCategory.isfeatured = models.isfeatured;
 
-            newCategory.Name = models.Name;
-            newCategory.Description = models.Description;
-            newCategory.ImageUrl = models.ImageUrl;
-            newCategory.isfeatured = models.isfeatured;
+                CategoryServices.Instance.SaveCategory(newCategory);
+                return RedirectToAction("CategoryTable");
+            }
+            else
+            {
+                return HttpStatusCodeResult(500);
+            }
 
-            CategoryServices.Instance.SaveCategory(newCategory);
-            return RedirectToAction("CategoryTable");
+        }
 
+        private ActionResult HttpStatusCodeResult(int v)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost]
@@ -110,6 +119,7 @@ namespace Amazon.Web.Controllers
         }
         #endregion
 
+      
     }
 
 }

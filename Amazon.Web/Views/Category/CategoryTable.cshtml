@@ -181,7 +181,8 @@
                 pageNo: $(this).attr("data-pageno"),
                 search: '@Model.searchKeyword'
             }
-        }).done(function (responce) {
+        })
+            .done(function (responce) {
             $("#tableContiner").html(responce);
         }).fail(function (XMLHTTpRequest, textStatus, errorThrown) {
             swal("Failed!", {

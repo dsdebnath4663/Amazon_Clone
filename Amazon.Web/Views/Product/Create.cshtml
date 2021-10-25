@@ -82,8 +82,12 @@
 
                         })
                         .fail(function (XMLHTTpRequest, textStatus, errorThrown) {
-
-                            swal("Failed to save the item !!");
+                            swal("Failed!", {
+                                icon: 'error',
+                                title: 'Oops... Failed to save the item !!',
+                                text: XMLHTTpRequest.responseText,
+                                footer: '<a href="">Why do I have this issue?</a>'
+                            });
                         })
 
 
